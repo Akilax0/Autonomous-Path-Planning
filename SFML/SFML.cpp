@@ -3,14 +3,40 @@
 
 
 int win_size = 500;
-int sq_num = 50;
-int grid[50][50];
-bool visited[50][50];
-int sq_size = win_size/sq_num;
-bool flag = false;
+int sq_num = 10;
+int grid[10][10];
+
+void obs1(){
+ //	50 x 50 obstacle
+	grid[11][11]=1;
+	grid[11][12]=1;
+	grid[11][13]=1;
+	grid[11][14]=1;
+	grid[11][15]=1;
+	grid[11][10]=1;
+	grid[11][9]=1;
+	grid[11][8]=1;
+}
+
+
+void obs2(){
+ //	10 x 10 obstacle
+	grid[3][3]=1;
+	grid[4][3]=1;
+	grid[5][3]=1;
+	grid[6][3]=1;
+	grid[7][3]=1;
+	grid[3][4]=1;
+	grid[3][5]=1;
+}
+
 
 int main()
 {
+
+	bool visited[sq_num][sq_num];
+	int sq_size = win_size/sq_num;
+	bool flag = false;
 
 	std::pair<int,int> start_node;
 	std::pair<int,int> end_node;
@@ -24,15 +50,16 @@ int main()
 	//grid options-----------------------
 	//   2 - start node
 	//   3 - end node
-	start_node = std::make_pair(10,10);
-	end_node = std::make_pair(18,10);
+	start_node = std::make_pair(1,1);
+	end_node = std::make_pair(4,4);
 
 	//Checking grid----------------------
 
 	//	grid[20][30] = 1;
-
+//	obs1(); 
+	obs2();
 	// Robot ----------------------------
-
+	
 	//draw circle of 100px radius
 	sf::CircleShape shape(5.f);
 	//circle color green
@@ -58,7 +85,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 
 
-//----------For dijkstra implementation
+//----------For pathfinding implementation
 	int si = start_node.first;
 	int sj = start_node.second;
 	int ei = end_node.first;
@@ -109,11 +136,45 @@ int main()
 			}
 		}
 
-//-----------------------------------------BFS---------------------------------------------------------
+////-----------------------------------------BFS---------------------------------------------------------
+//	if(!q.empty()){
+//
+//		std::pair<int,int> u = q.front();
+//		q.pop();
+//
+//		int u_i = u.first;
+//		int u_j = u.second;
+//		
+//		std::cout<<u_i<<" "<<u_j<<"\n";
+//		visited[u_i][u_j] = true;
+//
+//		if(u_i==ei && u_j==ej){
+//			std::cout<<"Found\n";
+//			break;
+//		}
+//
+//		if(u_i!=si || u_j!=sj)
+//			grid[u_i][u_j] = 4;
+//
+//
+//		if(u_i < sq_num && u_j+1<sq_num && visited[u_i][u_j+1]==false && grid[u_i][u_j+1]!=1){
+//			q.push(std::make_pair(u_i,u_j+1));
+//		}
+//		if(u_i+1 < sq_num && u_j<sq_num && visited[u_i+1][u_j]==false && grid[u_i+1][u_j]!=1){
+//			q.push(std::make_pair(u_i+1,u_j));
+//		}
+//		if(u_i-1 >=0 && u_j<sq_num && visited[u_i-1][u_j]==false && grid[u_i-1][u_j]!=1){
+//			q.push(std::make_pair(u_i-1,u_j));
+//		}
+//		if(u_i < sq_num && u_j-1>=0 && visited[u_i][u_j-1]==false && grid[u_i][u_j-1]!=1){
+//			q.push(std::make_pair(u_i,u_j-1));
+//		}
+//	}
+//
+////-----------------------------------------------------------------------------------------------------------
 
 
-
-
+//-----------------------------------------Dijkstra---------------------------------------------------------
 	if(!q.empty()){
 
 		std::pair<int,int> u = q.front();
@@ -125,22 +186,25 @@ int main()
 		std::cout<<u_i<<" "<<u_j<<"\n";
 		visited[u_i][u_j] = true;
 
-		if(u_i==ei && u_j==ej)break;
+		if(u_i==ei && u_j==ej){
+			std::cout<<"Found\n";
+			break;
+		}
 
 		if(u_i!=si || u_j!=sj)
 			grid[u_i][u_j] = 4;
 
 
-		if(u_i < sq_num && u_j+1<sq_num && visited[u_i][u_j+1]==false){
+		if(u_i < sq_num && u_j+1<sq_num && visited[u_i][u_j+1]==false && grid[u_i][u_j+1]!=1){
 			q.push(std::make_pair(u_i,u_j+1));
 		}
-		if(u_i+1 < sq_num && u_j<sq_num && visited[u_i+1][u_j]==false){
+		if(u_i+1 < sq_num && u_j<sq_num && visited[u_i+1][u_j]==false && grid[u_i+1][u_j]!=1){
 			q.push(std::make_pair(u_i+1,u_j));
 		}
-		if(u_i-1 >=0 && u_j<sq_num && visited[u_i-1][u_j]==false){
+		if(u_i-1 >=0 && u_j<sq_num && visited[u_i-1][u_j]==false && grid[u_i-1][u_j]!=1){
 			q.push(std::make_pair(u_i-1,u_j));
 		}
-		if(u_i < sq_num && u_j-1>=0 && visited[u_i][u_j-1]==false){
+		if(u_i < sq_num && u_j-1>=0 && visited[u_i][u_j-1]==false && grid[u_i][u_j-1]!=1){
 			q.push(std::make_pair(u_i,u_j-1));
 		}
 	}
