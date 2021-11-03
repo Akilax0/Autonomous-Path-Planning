@@ -95,11 +95,17 @@ int main()
 	grid[si][sj] = 2;
 	grid[ei][ej] = 3;
 
+	//BFS queue non priority
 	std::queue<std::pair<int,int>> q;
 	q.push(start_node);
 
+	int dis[sq_num][sq_num];
+	std::memset(dis,1000000,sizeof(dis));
+	dis[si][sj]=0;
 
 
+	int differenceX[] = {0,0,1,-1};
+	int differenceY[] = {-1,1,0,0};
 
 	//loop while window open
 	while (window.isOpen()) { 
@@ -157,18 +163,15 @@ int main()
 //			grid[u_i][u_j] = 4;
 //
 //
-//		if(u_i < sq_num && u_j+1<sq_num && visited[u_i][u_j+1]==false && grid[u_i][u_j+1]!=1){
-//			q.push(std::make_pair(u_i,u_j+1));
-//		}
-//		if(u_i+1 < sq_num && u_j<sq_num && visited[u_i+1][u_j]==false && grid[u_i+1][u_j]!=1){
-//			q.push(std::make_pair(u_i+1,u_j));
-//		}
-//		if(u_i-1 >=0 && u_j<sq_num && visited[u_i-1][u_j]==false && grid[u_i-1][u_j]!=1){
-//			q.push(std::make_pair(u_i-1,u_j));
-//		}
-//		if(u_i < sq_num && u_j-1>=0 && visited[u_i][u_j-1]==false && grid[u_i][u_j-1]!=1){
-//			q.push(std::make_pair(u_i,u_j-1));
-//		}
+	//	for(int i=0; i<4; i++)
+	//	{
+	//		int neighRow = u_i + differenceY[i];
+	//		int neighCol = u_j + differenceX[i];
+	//		if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+	//			//process node
+	//			q.push(std::make_pair(neighRow,neighCol));
+	//		}
+	//	}
 //	}
 //
 ////-----------------------------------------------------------------------------------------------------------
@@ -183,30 +186,36 @@ int main()
 		int u_i = u.first;
 		int u_j = u.second;
 		
-		std::cout<<u_i<<" "<<u_j<<"\n";
+		std::cout<<u_i<<" "<<u_j<<" "<<dis[u_i][u_j]<<"\n";
 		visited[u_i][u_j] = true;
 
 		if(u_i==ei && u_j==ej){
-			std::cout<<"Found\n";
-			break;
+			std::cout<<"Found Dis:"<<dis[u_i][u_j]+1<<"\n";
+			while(true){}
 		}
 
 		if(u_i!=si || u_j!=sj)
 			grid[u_i][u_j] = 4;
 
-
-		if(u_i < sq_num && u_j+1<sq_num && visited[u_i][u_j+1]==false && grid[u_i][u_j+1]!=1){
-			q.push(std::make_pair(u_i,u_j+1));
+		//indexes to store minimum valued distance
+		int v_i = u_i;
+		int v_j = u_j;
+		//min distance in each iteration 
+		int min_dis = 1000000;
+		for(int i=0; i<4; i++)
+		{
+			int neighRow = u_i + differenceY[i];
+			int neighCol = u_j + differenceX[i];
+			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1);
+				if(dis[u_i][u_j] + 1 < min_dis){
+					min_dis = dis[u_i][u_j] + 1;
+					v_i = neighRow;
+					v_j = neighCol;
+				}
+			}
 		}
-		if(u_i+1 < sq_num && u_j<sq_num && visited[u_i+1][u_j]==false && grid[u_i+1][u_j]!=1){
-			q.push(std::make_pair(u_i+1,u_j));
-		}
-		if(u_i-1 >=0 && u_j<sq_num && visited[u_i-1][u_j]==false && grid[u_i-1][u_j]!=1){
-			q.push(std::make_pair(u_i-1,u_j));
-		}
-		if(u_i < sq_num && u_j-1>=0 && visited[u_i][u_j-1]==false && grid[u_i][u_j-1]!=1){
-			q.push(std::make_pair(u_i,u_j-1));
-		}
+		q.push(std::make_pair(v_i,v_j));
 	}
 
 //-----------------------------------------------------------------------------------------------------------
