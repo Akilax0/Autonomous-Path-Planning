@@ -102,7 +102,6 @@ int main()
 
 	int dis[sq_num][sq_num];
 	std::memset(dis,INF,sizeof(dis));
-	dis[si][sj]=0;
 
 	//Euclidean  distances for A* 
 //	float eucDis[sq_num][sq_num];
@@ -117,7 +116,7 @@ int main()
 //	}
 //
 	//Manhattan  distances for A* 
-	float manDis[sq_num][sq_num];
+	int manDis[sq_num][sq_num];
 	std::memset(manDis,INF,sizeof(manDis));
 	
 	for(int i=0;i<sq_num;i++){
@@ -129,6 +128,7 @@ int main()
 	}
 
 
+	dis[si][sj]=0 + manDis[si][sj];
 
 	int differenceX[] = {0,0,1,-1};
 	int differenceY[] = {-1,1,0,0};
@@ -276,9 +276,9 @@ int main()
 			int neighRow = u_i + differenceY[i];
 			int neighCol = u_j + differenceX[i];
 			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1);
-				if(dis[u_i][u_j] + 1 < min_dis){
-					min_dis = dis[u_i][u_j] + 1;
+				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]);
+				if(dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]< min_dis){
+					min_dis = dis[u_i][u_j] + 1+ manDis[neighRow][neighCol];
 					v_i = neighRow;
 					v_j = neighCol;
 				}
