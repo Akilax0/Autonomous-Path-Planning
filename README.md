@@ -1,5 +1,5 @@
 
-#RRT ALGORITHMS FOR EXPERIMENTING ON AUTONOMOUS ROBOTS
+# RRT ALGORITHMS FOR EXPERIMENTING ON AUTONOMOUS ROBOTS
 
 
 
@@ -10,11 +10,11 @@ Four main concerns in path planning algorithms
 	3) Remain compatible with and enhance self referencing approach
 	4) Minimize storage, time complexity, computation time.
 
-==================== Dijkstra Algorithm ===========================
+## Dijkstra Algorithm 
 Checks for shortest path in a greedy approach. Keeps the minimum lengthpath at the top of a prority queue. Computationally inefficient as it checks for paths without a direction. 
 
 
-==================== A* Algorithm ===========================
+## A* Algorithm 
 
 Similar to Dijkstra but less computational. Uses heurestic rules to define nodes.
 	minimum checked for using 
@@ -31,11 +31,11 @@ heirarchical A* algorithm divide area into parts and find the local result. In t
 Can be further improved using time as a variable in the equation,
 	fw(n) = (1-w)g(n) + w.h(n)
 
-**Euclidean = sqrt((x1-x2)^2 + (y1-y2)^2)
-**Manhattan = |x1-x2| + |y1-y2|
-**Octile    = max|x1-x2| + |y1-y2| #Please check here
+	**Euclidean = sqrt((x1-x2)^2 + (y1-y2)^2)
+	**Manhattan = |x1-x2| + |y1-y2|
+	**Octile    = max|x1-x2| + |y1-y2| #Please check here
 
-Classification of A* algorithms variants
+### Classification of A* algorithms variants
 
 |     Algorithm       |  Static    |  Dynamic  |
 |     A*              |  T    |    |
