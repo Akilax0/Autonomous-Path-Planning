@@ -48,7 +48,7 @@ Can be further improved using time as a variable in the equation,
 |     smart heuristics        |	           |  T        |
 |     Lifelong planning       |  T         |  T        |
 
-==================== D* Algorithm ===========================
+## D* Algorithm 
 
 To solve the problem of partially known and dynamic environments in efficient way(Dynamic A*). Informed incremental search algorithm repairs cost map partially and the previously calculated cost map.
 
