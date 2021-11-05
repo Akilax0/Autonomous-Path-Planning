@@ -246,7 +246,50 @@ int main()
 //
 ////-----------------------------------------------------------------------------------------------------------
 //
-//-----------------------------------------A* with Euclidean heuristic---------------------------------------------------------
+//-----------------------------------------A* with Manhattan heuristic---------------------------------------------------------
+//	if(!q.empty()){
+//
+//		std::pair<int,int> u = q.front();
+//		q.pop();
+//
+//		int u_i = u.first;
+//		int u_j = u.second;
+//		
+//		std::cout<<u_i<<" "<<u_j<<" "<<dis[u_i][u_j]<<"\n";
+//		visited[u_i][u_j] = true;
+//
+//		if(u_i==ei && u_j==ej){
+//			std::cout<<"Found Dis:"<<dis[u_i][u_j]+1<<"\n";
+//			while(true){}
+//		}
+//
+//		if(u_i!=si || u_j!=sj)
+//			grid[u_i][u_j] = 4;
+//
+//		//indexes to store minimum valued distance
+//		int v_i = u_i;
+//		int v_j = u_j;
+//		//min distance in each iteration 
+//		int min_dis = 1000000;
+//		for(int i=0; i<4; i++)
+//		{
+//			int neighRow = u_i + differenceY[i];
+//			int neighCol = u_j + differenceX[i];
+//			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+//				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]);
+//				if(dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]< min_dis){
+//					min_dis = dis[u_i][u_j] + 1+ manDis[neighRow][neighCol];
+//					v_i = neighRow;
+//					v_j = neighCol;
+//				}
+//			}
+//		}
+//		q.push(std::make_pair(v_i,v_j));
+//	}
+//
+////-----------------------------------------------------------------------------------------------------------
+
+//----------------------------------------- Life Long A* with Manhattan heuristic---------------------------------------------------------
 	if(!q.empty()){
 
 		std::pair<int,int> u = q.front();
@@ -288,7 +331,6 @@ int main()
 	}
 
 //-----------------------------------------------------------------------------------------------------------
-
 		window.clear();
 		for(int i=0;i<sq_num;i++){
 			for(int j=0;j<sq_num;j++){
