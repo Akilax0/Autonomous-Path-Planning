@@ -37,15 +37,16 @@ Can be further improved using time as a variable in the equation,
 
 ### Classification of A* algorithms variants
 
-|     Algorithm       |  Static    |  Dynamic  |
-|     A*              |  T    |    |
-|     Heirarchical A* |  T    |    |
-|    Improved Heirarchical A*     |      |  T  |
-|     Guided Hybrid A*   |      |  T  |
-|     equal sampling     |  T   |    |
-|     Diagonal     |  T    |    |
-|     smart heuristics     |   |  T  |
-|     Lifelong planning     |  T   | T |
+|     Algorithm               |  Static    |  Dynamic  |
+|-----------------------------|------------|-----------|
+|     A*                      |  T         |           |
+|     Heirarchical A*         |  T         |           |
+|     Improved Heirarchical A*|            |  T        |
+|     Guided Hybrid A*        |            |  T        |
+|     equal sampling          |  T         |           |
+|     Diagonal     			  |  T         |           |
+|     smart heuristics        |	           |  T        |
+|     Lifelong planning       |  T         |  T        |
 
 ==================== D* Algorithm ===========================
 
@@ -54,6 +55,7 @@ To solve the problem of partially known and dynamic environments in efficient wa
 
 
 |     Algorithm       |  Static    |  Dynamic  |
+|---------------------|------------|-----------|
 |     D*              |            |  T        |
 |     D* Lite         |            |  T        |
 |    Enhanced D* Lite |            |  T        |
