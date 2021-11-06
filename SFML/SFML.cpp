@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>  
 #include <bits/stdc++.h>
 
+
 #define INF 1000000
 
 int win_size = 500;
