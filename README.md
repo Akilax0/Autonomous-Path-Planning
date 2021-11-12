@@ -48,6 +48,33 @@ Can be further improved using time as a variable in the equation,
 |     smart heuristics        |	           |  T        |
 |     Lifelong planning       |  T         |  T        |
 
+
+
+##Life Long A* Algorithm 
+
+An incremental heuristic search algorithm based on A*.
+     - Sven Koenig
+	 - Maxim Likhaachev
+	 (2001)
+
+The algorithm can adapt to changes in the graph without recalculating the entire graph.
+Done by updating the g-values (distance from start) from previous during current search when required.
+Uses heuristic as lower boundary for the cost to goal.
+
+
+Predecessors  - node which leads towards current node
+Successors - node which leads from current node
+
+
+
+
+
+
+
+
+
+
+
 ## D* Algorithm 
 
 To solve the problem of partially known and dynamic environments in efficient way(Dynamic A*). Informed incremental search algorithm repairs cost map partially and the previously calculated cost map.

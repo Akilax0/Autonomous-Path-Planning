@@ -1,12 +1,49 @@
 #include <SFML/Graphics.hpp>  
 #include <bits/stdc++.h>
 
-
 #define INF 1000000
 
 int win_size = 500;
 int sq_num = 10;
 int grid[10][10];
+int si,sj,ei,ej;
+
+int differenceX[] = {0,0,1,-1};
+int differenceY[] = {-1,1,0,0};
+
+void BFS(std::queue<std::pair<int,int>> q,bool visited[][sq_num]){
+
+//-----------------------------------------BFS---------------------------------------------------------
+
+		std::pair<int,int> u = q.front();
+		q.pop();
+
+		int u_i = u.first;
+		int u_j = u.second;
+		
+		std::cout<<u_i<<" "<<u_j<<"\n";
+		visited[u_i][u_j] = true;
+
+		if(u_i==ei && u_j==ej){
+			std::cout<<"Found\n";
+			return;
+		}
+
+		if(u_i!=si || u_j!=sj)
+			grid[u_i][u_j] = 4;
+
+
+		for(int i=0; i<4; i++)
+		{
+			int neighRow = u_i + differenceY[i];
+			int neighCol = u_j + differenceX[i];
+			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+				//process node
+				q.push(std::make_pair(neighRow,neighCol));
+			}
+		}
+//-----------------------------------------------------------------------------------------------------------
+}
 
 void obs1(){
  //	50 x 50 obstacle
@@ -39,7 +76,7 @@ int main()
 	bool visited[sq_num][sq_num];
 	int sq_size = win_size/sq_num;
 	bool flag = false;
-
+ 
 	std::pair<int,int> start_node;
 	std::pair<int,int> end_node;
 
@@ -48,8 +85,7 @@ int main()
 
 	//render window with pixel size and title
 	sf::RenderWindow window(sf::VideoMode(win_size, win_size), "Path Grid");
-
-	//grid options-----------------------
+//grid options-----------------------
 	//   2 - start node
 	//   3 - end node
 	start_node = std::make_pair(1,1);
@@ -88,10 +124,11 @@ int main()
 
 
 //----------For pathfinding implementation
-	int si = start_node.first;
-	int sj = start_node.second;
-	int ei = end_node.first;
-	int ej = end_node.second;
+
+	si = start_node.first;
+	sj = start_node.second;
+	ei = end_node.first;
+	ej = end_node.second;
 
 
 	grid[si][sj] = 2;
@@ -131,8 +168,8 @@ int main()
 
 	dis[si][sj]=0 + manDis[si][sj];
 
-	int differenceX[] = {0,0,1,-1};
-	int differenceY[] = {-1,1,0,0};
+	//int differenceX[] = {0,0,1,-1};
+	//int differenceY[] = {-1,1,0,0};
 
 	//loop while window open
 	while (window.isOpen()) { 
@@ -170,37 +207,10 @@ int main()
 		}
 
 ////-----------------------------------------BFS---------------------------------------------------------
-//	if(!q.empty()){
-//
-//		std::pair<int,int> u = q.front();
-//		q.pop();
-//
-//		int u_i = u.first;
-//		int u_j = u.second;
-//		
-//		std::cout<<u_i<<" "<<u_j<<"\n";
-//		visited[u_i][u_j] = true;
-//
-//		if(u_i==ei && u_j==ej){
-//			std::cout<<"Found\n";
-//			break;
-//		}
-//
-//		if(u_i!=si || u_j!=sj)
-//			grid[u_i][u_j] = 4;
-//
-//
-	//	for(int i=0; i<4; i++)
-	//	{
-	//		int neighRow = u_i + differenceY[i];
-	//		int neighCol = u_j + differenceX[i];
-	//		if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-	//			//process node
-	//			q.push(std::make_pair(neighRow,neighCol));
-	//		}
-	//	}
-//	}
-//
+	if(!q.empty()){
+		BFS(q,visited);
+	}
+
 ////-----------------------------------------------------------------------------------------------------------
 
 
@@ -290,46 +300,46 @@ int main()
 //
 ////-----------------------------------------------------------------------------------------------------------
 
-//----------------------------------------- Life Long A* with Manhattan heuristic---------------------------------------------------------
-	if(!q.empty()){
+////----------------------------------------- Life Long A* with Manhattan heuristic---------------------------------------------------------
+	//if(!q.empty()){
 
-		std::pair<int,int> u = q.front();
-		q.pop();
+		//std::pair<int,int> u = q.front();
+		//q.pop();
 
-		int u_i = u.first;
-		int u_j = u.second;
+		//int u_i = u.first;
+		//int u_j = u.second;
 		
-		std::cout<<u_i<<" "<<u_j<<" "<<dis[u_i][u_j]<<"\n";
-		visited[u_i][u_j] = true;
+		//std::cout<<u_i<<" "<<u_j<<" "<<dis[u_i][u_j]<<"\n";
+		//visited[u_i][u_j] = true;
 
-		if(u_i==ei && u_j==ej){
-			std::cout<<"Found Dis:"<<dis[u_i][u_j]+1<<"\n";
-			while(true){}
-		}
+		//if(u_i==ei && u_j==ej){
+			//std::cout<<"Found Dis:"<<dis[u_i][u_j]+1<<"\n";
+			//while(true){}
+		//}
 
-		if(u_i!=si || u_j!=sj)
-			grid[u_i][u_j] = 4;
+		//if(u_i!=si || u_j!=sj)
+			//grid[u_i][u_j] = 4;
 
-		//indexes to store minimum valued distance
-		int v_i = u_i;
-		int v_j = u_j;
-		//min distance in each iteration 
-		int min_dis = 1000000;
-		for(int i=0; i<4; i++)
-		{
-			int neighRow = u_i + differenceY[i];
-			int neighCol = u_j + differenceX[i];
-			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]);
-				if(dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]< min_dis){
-					min_dis = dis[u_i][u_j] + 1+ manDis[neighRow][neighCol];
-					v_i = neighRow;
-					v_j = neighCol;
-				}
-			}
-		}
-		q.push(std::make_pair(v_i,v_j));
-	}
+		////indexes to store minimum valued distance
+		//int v_i = u_i;
+		//int v_j = u_j;
+		////min distance in each iteration 
+		//int min_dis = 1000000;
+		//for(int i=0; i<4; i++)
+		//{
+			//int neighRow = u_i + differenceY[i];
+			//int neighCol = u_j + differenceX[i];
+			//if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+				//dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]);
+				//if(dis[u_i][u_j] + 1 + manDis[neighRow][neighCol]< min_dis){
+					//min_dis = dis[u_i][u_j] + 1+ manDis[neighRow][neighCol];
+					//v_i = neighRow;
+					//v_j = neighCol;
+				//}
+			//}
+		//}
+		//q.push(std::make_pair(v_i,v_j));
+	//}
 
 //-----------------------------------------------------------------------------------------------------------
 		window.clear();
