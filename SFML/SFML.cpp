@@ -4,25 +4,37 @@
 #define INF 1000000
 
 int win_size = 500;
-int sq_num = 10;
+#define sq_num 10
 int grid[10][10];
 int si,sj,ei,ej;
 
 int differenceX[] = {0,0,1,-1};
 int differenceY[] = {-1,1,0,0};
 
-void BFS(std::queue<std::pair<int,int>> q,bool visited[][sq_num]){
-
-//-----------------------------------------BFS---------------------------------------------------------
+void BFS(std::queue<std::pair<int,int>> q,bool* visited){
+////-----------------------------------------BFS---------------------------------------------------------
 
 		std::pair<int,int> u = q.front();
 		q.pop();
 
 		int u_i = u.first;
 		int u_j = u.second;
-		
-		std::cout<<u_i<<" "<<u_j<<"\n";
-		visited[u_i][u_j] = true;
+
+		//std::cout<<u_i<<" "<<u_j<<"\n";
+		visited[u_i*sq_num + u_j] = true;
+
+
+		for(int x=0;x<sq_num;x++){
+
+			for(int z=0;z<sq_num;z++){
+
+
+				std::cout<<visited[x*sq_num+z]<<"\t";
+			}
+			std::cout<<"\n";
+				
+		}
+
 
 		if(u_i==ei && u_j==ej){
 			std::cout<<"Found\n";
@@ -37,12 +49,16 @@ void BFS(std::queue<std::pair<int,int>> q,bool visited[][sq_num]){
 		{
 			int neighRow = u_i + differenceY[i];
 			int neighCol = u_j + differenceX[i];
-			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow*sq_num + neighCol]==false&& grid[neighRow][neighCol]!=1){
 				//process node
+				//&& visited[neighRow][neighCol]==false &&
+
+	
+				std::cout<<neighRow<<" "<<neighCol<<"\n";
 				q.push(std::make_pair(neighRow,neighCol));
 			}
 		}
-//-----------------------------------------------------------------------------------------------------------
+////-----------------------------------------------------------------------------------------------------------
 }
 
 void obs1(){
@@ -206,10 +222,42 @@ int main()
 			}
 		}
 
-////-----------------------------------------BFS---------------------------------------------------------
+//////-----------------------------------------BFS---------------------------------------------------------
 	if(!q.empty()){
-		BFS(q,visited);
+		BFS(q,&visited[0][0]);
 	}
+////-----------------------------------------BFS---------------------------------------------------------
+
+		//std::pair<int,int> u = q.front();
+		//q.pop();
+
+		//int u_i = u.first;
+		//int u_j = u.second;
+		
+		//std::cout<<u_i<<" "<<u_j<<"\n";
+		//visited[u_i][u_j] = true;
+
+		//if(u_i==ei && u_j==ej){
+			//std::cout<<"Found\n";
+			//while(true){}
+////			return;
+		//}
+
+		//if(u_i!=si || u_j!=sj)
+			//grid[u_i][u_j] = 4;
+
+
+		//for(int i=0; i<4; i++)
+		//{
+			//int neighRow = u_i + differenceY[i];
+			//int neighCol = u_j + differenceX[i];
+			//if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+				////process node
+				//q.push(std::make_pair(neighRow,neighCol));
+			//}
+		//}
+////-----------------------------------------------------------------------------------------------------------
+	//}
 
 ////-----------------------------------------------------------------------------------------------------------
 

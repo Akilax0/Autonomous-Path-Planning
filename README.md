@@ -1,6 +1,7 @@
 
-# RRT ALGORITHMS FOR EXPERIMENTING ON AUTONOMOUS ROBOTS
+# PATH PLANNING ALGORITHMS FOR EXPERIMENTING ON AUTONOMOUS ROBOTS
 
+Exploration of modern path finding algorithms as an extension towards rovers and other robotic vehicle navigation.
 
 
 Four main concerns in path planning algorithms
@@ -64,14 +65,6 @@ Uses heuristic as lower boundary for the cost to goal.
 
 Predecessors  - node which leads towards current node
 Successors - node which leads from current node
-
-
-
-
-
-
-
-
 
 
 
