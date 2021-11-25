@@ -12,45 +12,57 @@ class Node{
 		int i,j,val;
 };
 
-
-
 int grid[sq_num][sq_num];
 
 bool visited[sq_num][sq_num];
 int differenceX[] = {0,0,1,-1};
 int differenceY[] = {-1,1,0,0};
 
-void BFS(std::queue<Node> *q, Node end){
+int dis[sq_num][sq_num];
+
+//Manhattan  distances for A* 
+int manDis[sq_num][sq_num];
+
+void A_Star(std::queue<Node> *q, Node end){
 
 	if(!q->empty()){
 
 		Node u = q->front();
 		q->pop();
+	
+		std::cout<<u.i<<" "<<u.j<<" "<<dis[u.i][u.j]<<"\n";
 		visited[u.i][u.j] = true;
 
-
-		grid[u.i][u.j]=u.val;
-
 		if(u.i==end.i && u.j==end.j){
-			std::cout<<"Found\n";
+			std::cout<<"Found Dis:"<<dis[u.i][u.j]+1<<"\n";
 			while(true){}
 		}
 
+		grid[u.i][u.j]=u.val;
 
+		Node v;
+
+		//indexes to store minimum valued distance
+		v.i = u.i;
+		v.j = u.j;
+
+		//min distance in each iteration 
+		int min_dis = 1000000;
 		for(int i=0; i<4; i++)
 		{
 			int neighRow = u.i + differenceY[i];
 			int neighCol = u.j + differenceX[i];
 			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-				//process node
-				Node v;
-				v.i=neighRow;
-				v.j=neighCol;
-				v.val=4;
-				q->push(v);
+				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u.i][u.j] + 1 + manDis[neighRow][neighCol]);
+				if(dis[u.i][u.j] + 1 + manDis[neighRow][neighCol]< min_dis){
+					min_dis = dis[u.i][u.j] + 1+ manDis[neighRow][neighCol];
+					v.i = neighRow;
+					v.j = neighCol;
+				}
 			}
-
 		}
+		v.val = 4;
+		q->push(v);
 	}
 }
 
@@ -70,20 +82,18 @@ void obs2(){
 int main()
 {
 
-
-
-
 	int sq_size = (int) win_size/sq_num;
 
 	bool flag = false;
 	std::memset(grid,0,sizeof(grid));
 	std::memset(visited,false,sizeof(visited));
+	std::memset(dis,INF,sizeof(dis));
+	std::memset(manDis,INF,sizeof(manDis));
 
 	//render window with pixel size and title
 	sf::RenderWindow window(sf::VideoMode(win_size, win_size), "Path Grid");
 
 	obs2();
-
 
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -91,7 +101,6 @@ int main()
 	// Environment ----------------------
 	sf::Vector2f position(100, 100);
 	sf::Vector2f size(sq_size, sq_size);	
-	
 
 	//rectangle object (Float) or else IntRect
 	sf::RectangleShape r;
@@ -106,13 +115,10 @@ int main()
 	window.setFramerateLimit(120);
 	window.setVerticalSyncEnabled(true);
 
-//======================== Prep for BFS ===============================
-
-
+//======================== Prep for A_Star ===============================
 
 	Node start;
 	Node end;
-
 
 	start.i=2;
 	start.j=2;
@@ -122,9 +128,18 @@ int main()
 	end.j=9;
 	end.val=3;
 	
+	for(int i=0;i<sq_num;i++){
+		for(int j=0;j<sq_num;j++){
+			manDis[i][j]=std::abs(end.i-i)+ std::abs(end.i-j);
+			std::cout<<manDis[i][j]<<" ";
+		}
+		std::cout<<"\n";
+	}
+
+	dis[start.i][start.j]=0 + manDis[start.i][start.j];
+
 	std::queue<Node> q;
 	q.push(start);
-
 
     while (window.isOpen())
     {
@@ -162,13 +177,7 @@ int main()
 		grid[start.i][start.j]=start.val;
 		grid[end.i][end.j]=end.val;
 
-
-
-
-		BFS(&q,end);
-
-
-
+		A_Star(&q,end);
 
         window.clear();
 

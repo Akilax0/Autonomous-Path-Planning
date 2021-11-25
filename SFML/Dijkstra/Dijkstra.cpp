@@ -13,7 +13,6 @@ class Node{
 };
 
 
-
 int grid[sq_num][sq_num];
 
 bool visited[sq_num][sq_num];
@@ -82,8 +81,6 @@ void obs2(){
 	grid[3][5]=1;
 }
 
-
-
 int main()
 {
 
@@ -93,7 +90,6 @@ int main()
 	std::memset(grid,0,sizeof(grid));
 	std::memset(visited,false,sizeof(visited));
 	std::memset(dis,INF,sizeof(dis));
-
 
 	//render window with pixel size and title
 	sf::RenderWindow window(sf::VideoMode(win_size, win_size), "Path Grid");
