@@ -7,7 +7,7 @@ CC = g++
 CFLAGS  = -g -Wall
 
 # The build target 
-TARGET = LPA
+TARGET = A_Star
 
 all: $(TARGET)
 

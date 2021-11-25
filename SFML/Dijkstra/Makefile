@@ -7,7 +7,7 @@ CC = g++
 CFLAGS  = -g -Wall
 
 # The build target 
-TARGET = SFML
+TARGET = Dijkstra
 
 all: $(TARGET)
 
