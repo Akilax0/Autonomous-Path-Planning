@@ -20,37 +20,54 @@ bool visited[sq_num][sq_num];
 int differenceX[] = {0,0,1,-1};
 int differenceY[] = {-1,1,0,0};
 
-void BFS(std::queue<Node> *q, Node end){
+int dis[sq_num][sq_num];
+void Dijkstra(std::queue<Node> *q, Node end){
 
 	if(!q->empty()){
 
 		Node u = q->front();
 		q->pop();
+
+		std::cout<<u.i<<" "<<u.j<<" Dis:"<<dis[u.i][u.j]+1<<"\n";
 		visited[u.i][u.j] = true;
 
-
-		grid[u.i][u.j]=u.val;
-
 		if(u.i==end.i && u.j==end.j){
-			std::cout<<"Found\n";
+			std::cout<<"Found Dis:"<<dis[u.i][u.j]+1<<"\n";
 			while(true){}
 		}
+
+		grid[u.i][u.j] = u.val;
+
+		Node v;
+
+
+		//indexes to store minimum valued distance
+		v.i = u.i;
+		v.j = u.j;
+
+		//min distance in each iteration 
+		int min_dis = 1000000;
 
 
 		for(int i=0; i<4; i++)
 		{
 			int neighRow = u.i + differenceY[i];
 			int neighCol = u.j + differenceX[i];
-			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-				//process node
-				Node v;
-				v.i=neighRow;
-				v.j=neighCol;
-				v.val=4;
-				q->push(v);
-			}
 
+			std::cout<<neighRow<<" "<<neighCol<<"\n";
+
+
+			if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
+				dis[neighRow][neighCol] = std::min(dis[neighRow][neighCol],dis[u.i][u.j] + 1);
+				if(dis[u.i][u.j] + 1 < min_dis){
+					min_dis = dis[u.i][u.j] + 1;
+					v.i = neighRow;
+					v.j = neighCol;
+				}
+			}
 		}
+		v.val = 4;
+		q->push(v);
 	}
 }
 
@@ -70,14 +87,13 @@ void obs2(){
 int main()
 {
 
-
-
-
 	int sq_size = (int) win_size/sq_num;
 
 	bool flag = false;
 	std::memset(grid,0,sizeof(grid));
 	std::memset(visited,false,sizeof(visited));
+	std::memset(dis,INF,sizeof(dis));
+
 
 	//render window with pixel size and title
 	sf::RenderWindow window(sf::VideoMode(win_size, win_size), "Path Grid");
@@ -106,7 +122,7 @@ int main()
 	window.setFramerateLimit(120);
 	window.setVerticalSyncEnabled(true);
 
-//======================== Prep for BFS ===============================
+//======================== Prep for Dijkstra ===============================
 
 
 
@@ -122,6 +138,9 @@ int main()
 	end.j=9;
 	end.val=3;
 	
+
+	dis[start.i][start.j]=0;
+
 	std::queue<Node> q;
 	q.push(start);
 
@@ -165,7 +184,7 @@ int main()
 
 
 
-		BFS(&q,end);
+		Dijkstra(&q,end);
 
 
 
