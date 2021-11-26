@@ -10,9 +10,15 @@ class Node{
 
 	public:
 		int i,j,val;
+		int rhs = 0;
 };
 
-
+struct CompareDis {
+    bool operator()(Node const & n1, Node const & n2) {
+        // return "true" if "n1" is ordered before "n2", for example:
+        return n1.rhs < n2.rhs;
+    }
+};
 
 int grid[sq_num][sq_num];
 
@@ -20,14 +26,13 @@ bool visited[sq_num][sq_num];
 int differenceX[] = {0,0,1,-1};
 int differenceY[] = {-1,1,0,0};
 
-void BFS(std::queue<Node> *q, Node end){
+void LPA(std::priority_queue<Node,std::vector<Node>,CompareDis> *q, Node end){
 
 	if(!q->empty()){
 
-		Node u = q->front();
+		Node u = q->top();
 		q->pop();
 		visited[u.i][u.j] = true;
-
 
 		grid[u.i][u.j]=u.val;
 
@@ -35,7 +40,6 @@ void BFS(std::queue<Node> *q, Node end){
 			std::cout<<"Found\n";
 			while(true){}
 		}
-
 
 		for(int i=0; i<4; i++)
 		{
@@ -69,9 +73,6 @@ void obs2(){
 
 int main()
 {
-
-
-
 
 	int sq_size = (int) win_size/sq_num;
 
@@ -122,7 +123,7 @@ int main()
 	end.j=9;
 	end.val=3;
 	
-	std::queue<Node> q;
+	std::priority_queue<Node,std::vector<Node>,CompareDis> q;
 	q.push(start);
 
 
@@ -162,13 +163,7 @@ int main()
 		grid[start.i][start.j]=start.val;
 		grid[end.i][end.j]=end.val;
 
-
-
-
-		BFS(&q,end);
-
-
-
+		LPA(&q,end);
 
         window.clear();
 
