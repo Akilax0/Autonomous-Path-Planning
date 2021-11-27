@@ -5,12 +5,17 @@
 
 #define win_size 500
 #define sq_num  10
+#define COST 1
 
 class Node{
-
+//g value distance from start
+//
 	public:
-		int i,j,val;
-		int rhs = 0;
+		int i,j;
+		int g,rhs;
+		vector<int> k(2);
+		vector<Node> Successors;
+		vector<Node> Predeccessors;
 };
 
 struct CompareDis {
@@ -21,14 +26,67 @@ struct CompareDis {
 };
 
 int grid[sq_num][sq_num];
+int h[sq_num][sq_num];
+Node n[sq_size][sq_num];
+std::priority_queue<Node,std::vector<Node>,CompareDis> q;
+
 
 bool visited[sq_num][sq_num];
 int differenceX[] = {0,0,1,-1};
 int differenceY[] = {-1,1,0,0};
 
-void LPA(std::priority_queue<Node,std::vector<Node>,CompareDis> *q, Node end){
 
-	if(!q->empty()){
+
+//Life Long A Star implementation
+//g(s) - distance value from start node (minmum path length)
+//Like A* LPA* uses heurisitic(s,sgoal) 
+//c(s,s') cost of moving to successor (here in the grid value always 0)
+
+void CalculateKey(Node s){
+    s.k = {min(s.g,s.rhs)+h[s.i][s.j],min(s.g,s.rhs)};
+}
+
+void updateNode(Node s,Node start){
+	if(s.i!=start.i && s.j!=start.j){
+		s.rhs=INF;
+		for(auto pred : s.Predeccessors)
+			s.rhs = min(s.rhs,pred.g+ COST);
+		if(q.contains)
+	}
+
+
+}
+
+void LPA(std::priority_queue<Node,std::vector<Node>,CompareDis> *q,Node start, Node end){
+
+	while(true){
+		if(q->top().k < CalculateKey(end) || end.rhs !=	r.g){
+
+			Node u = q.pop();
+			if(u.g>u.rhs){
+				u.g = u.rhs;
+				
+				for(auto v : u.Successors)
+				{
+					updateNode(v,start);
+				}
+			}else{
+				u.g=INF;
+				updateNode(u,start);
+
+				for(auto v : u.Successors)
+				{
+					updateNode(v);
+				}
+
+			}
+
+		}
+
+
+
+
+
 
 		Node u = q->top();
 		q->pop();
@@ -51,6 +109,7 @@ void LPA(std::priority_queue<Node,std::vector<Node>,CompareDis> *q, Node end){
 				v.i=neighRow;
 				v.j=neighCol;
 				v.val=4;
+
 				q->push(v);
 			}
 
@@ -107,26 +166,6 @@ int main()
 	window.setFramerateLimit(120);
 	window.setVerticalSyncEnabled(true);
 
-//======================== Prep for BFS ===============================
-
-
-
-	Node start;
-	Node end;
-
-
-	start.i=2;
-	start.j=2;
-	start.val=2;
-
-	end.i=8;
-	end.j=9;
-	end.val=3;
-	
-	std::priority_queue<Node,std::vector<Node>,CompareDis> q;
-	q.push(start);
-
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -160,11 +199,44 @@ int main()
 			}
         }
 
-		grid[start.i][start.j]=start.val;
-		grid[end.i][end.j]=end.val;
+//======================== Initialization for LPA* ===============================
 
-		LPA(&q,end);
 
+
+	for(int i=0;i<sq_num;i++){
+		for(int j=0;j<sq_num;j++){
+
+			n[i][j].i = i;
+			n[i][j].j = j;
+			n[i][j].rhs=INF;
+			n[i][j].g=INF;
+
+			for(int k=0; k<4; k++)
+			{
+				int neighRow = i + differenceY[k];
+				int neighCol = j + differenceX[k];
+
+				if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && grid[neighRow][neighCol]!=1){
+					n[neighRow][neighCol].Predeccessors.push_back(n[i][j]);
+					n[i][j].Successors.push_back(n[neighRow][neighCol]);
+				}
+			}
+		}
+	}
+
+	//Start node at [2][2]
+	n[2][2].rhs=0;
+
+	//Goal Node at [8][9] 
+	//end.i=8;
+	//end.j=9;
+	//end.val=3;
+	
+	CalculateKey(n[2][2]);
+	q.push(n[2][2]);
+
+	LPA(&q,n[2][2],n[8][9]);
+//=======================================================================
         window.clear();
 
 		for(int i=0;i<sq_num;i++){
