@@ -12,7 +12,7 @@ TARGET = LPA
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CC) -c $(TARGET).cpp && $(CC) $(TARGET).o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
+	$(CC) -c $(TARGET).cpp && $(CC) $(TARGET).o -o -g sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
 
 clean:
 	$(RM) $(TARGET)
