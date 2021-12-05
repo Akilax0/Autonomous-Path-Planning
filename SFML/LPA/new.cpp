@@ -27,14 +27,36 @@ class Node{
 		int i,j;
 		int g;
 		int rhs; 
-		//pair<int,int> key;
+		pair<int,int> key;
 		vector<Node> Successors;
 		vector<Node> Predecessors;
 
 };
 
 
-void initialize(Node grid[][size], int h[][size], Node start, Node goal){
+//pair<int,int>
+void calculateKey(Node s, int h[][size]){
+	//Calculates the key value
+	int a = min(s.g,s.rhs) + h[s.i][s.j];
+	int b = min(s.g,s.rhs);
+
+
+	pair<int,int> key = make_pair(a,b);
+	s.key = key;
+	//return key;
+}
+
+struct CompareKeys {
+    bool operator()(Node const& p1, Node const& p2)
+    {
+        // return "true" if "p1" is ordered
+        // before "p2", for example:
+        return (p1.key.first < p2.key.first || (p1.key.first == p2.key.first && p1.key.first <= p2.key.first));
+    }
+};
+
+
+void initialize(Node grid[][size], int h[][size], Node start, Node goal, priority_queue<Node,vector<Node>, CompareKeys> &q){
 //Initializes the grid of Nodes
 	
 	grid[start.i][start.j].state = 3;
@@ -61,6 +83,8 @@ void initialize(Node grid[][size], int h[][size], Node start, Node goal){
 		}
 	}
 
+	calculateKey(grid[start.i][start.j],h);
+	q.push(grid[start.i][start.j]);
 
 }
 
@@ -92,17 +116,6 @@ void obs2(Node grid[][size]){
 }
 
 
-pair<int,int> calculateKey(Node s, int h[][size]){
-	//Calculates the key value
-	int a = min(s.g,s.rhs) + h[s.i][s.j];
-	int b = min(s.g,s.rhs);
-
-
-	//pair<int,int> key = make_pair(a,b);
-	return make_pair(a,b);
-}
-
-
 
 
 int main(){
@@ -118,11 +131,16 @@ int main(){
 	goal.i = 18;
 	goal.j = 10;
 
-	initialize(grid,h,start,goal);
+	priority_queue< Node , vector<Node>, CompareKeys> q;
+
+	initialize(grid,h,start,goal,q);
 
 	obs2(grid);
 
 	neighbours(grid);
+
+	
+
 
 	for(int i=0;i<size;i++){
 		for(int j=0;j<size;j++){
