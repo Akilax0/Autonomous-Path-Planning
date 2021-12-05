@@ -7,12 +7,12 @@ CC = g++
 CFLAGS  = -g -Wall
 
 # The build target 
-TARGET = LPA
+TARGET = D_Star
 
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CC) -c $(TARGET).cpp && $(CC) $(TARGET).o -g -o  sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
+	$(CC) -c $(TARGET).cpp && $(CC) $(TARGET).o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
 
 clean:
 	$(RM) $(TARGET)

@@ -5,7 +5,7 @@
 
 #define win_size 500
 #define sq_num  10
-#define COST 1
+
 
 class Node{
 	public:
@@ -16,106 +16,14 @@ class Node{
 		std::vector<Node> Predeccessors;
 };
 
-struct CompareDis {
-	bool operator()(Node const & n1, Node const & n2) {
-		// return "true" if "n1" is ordered before "n2", for example:
-		return n1.rhs < n2.rhs;
-	}
-};
-
-bool CompareKey(std::vector<int> a,std::vector<int> b){
-	if(a[1]<b[1]){
-		return true;
-	}else if(a[1]==b[2]){
-		return a[2]<b[2];
-	}else{
-		return false;
-	}
-}
-
-int grid[sq_num][sq_num];
-int h[sq_num][sq_num];
-Node n[sq_num][sq_num];
-std::priority_queue<Node,std::vector<Node>,CompareDis> q;
-
-
-bool visited[sq_num][sq_num];
-int differenceX[] = {0,0,1,-1};
-int differenceY[] = {-1,1,0,0};
 
 //Life Long A Star implementation
 //g(s) - distance value from start node (minmum path length)
 //Like A* LPA* uses heurisitic(s,sgoal) 
 //c(s,s') cost of moving to successor (here in the grid value always 0)
 
-std::vector<int> CalculateKey(Node s){
-	std::vector<int> key(2);
-	key = {std::min(s.g,s.rhs)+h[s.i][s.j],std::min(s.g,s.rhs)};
-	s.k = key;
-	return key;
-}
 
-void updateNode(Node s,Node start){
-	if(s.i!=start.i && s.j!=start.j){
-		s.rhs=INF;
-		for(auto pred : s.Predeccessors)
-			s.rhs = std::min(s.rhs,pred.g+ COST);
-		if(q)
-	}
-}
 
-void LPA(Node start, Node end){
-
-	while(true){
-		if(CompareKey(q.top().k,CalculateKey(end)) || end.rhs != end.g){ // q.top().k < CalculateKey(end) 
-			Node u = q.top();
-			q.pop();
-			if(u.g > u.rhs){
-				u.g = u.rhs;
-
-				for(auto v : u.Successors)
-				{
-					updateNode(v,start);
-				}
-			}else{
-				u.g=INF;
-				updateNode(u,start);
-
-				for(auto v : u.Successors)
-				{
-					updateNode(v,start);
-				}
-			}
-		}
-
-		//Node u = q.top();
-		//q.pop();
-		//visited[u.i][u.j] = true;
-
-		//grid[u.i][u.j]=u.val;
-
-		//if(u.i==end.i && u.j==end.j){
-		//std::cout<<"Found\n";
-		//while(true){}
-		//}
-
-		//for(int i=0; i<4; i++)
-		//{
-		//int neighRow = u.i + differenceY[i];
-		//int neighCol = u.j + differenceX[i];
-		//if(std::min(neighRow, neighCol) >= 0 && neighRow < sq_num && neighCol < sq_num && visited[neighRow][neighCol]==false && grid[neighRow][neighCol]!=1){
-		////process node
-		//Node v;
-		//v.i=neighRow;
-		//v.j=neighCol;
-		//v.val=4;
-
-		//q.push(v);
-		//}
-
-		//}
-	}
-}
 
 void obs2(){
 	//	10 x 10 obstacle
@@ -148,10 +56,7 @@ int main()
 
 	// Environment ----------------------
 	sf::Vector2f position(100, 100);
-	sf::Vector2f size(sq_size, sq_size);	
-
-
-	//rectangle object (Float) or else IntRect
+	sf::Vector2f size(sq_size, sq_size);	//rectangle object (Float) or else IntRect
 	sf::RectangleShape r;
 	r.setSize(size);
 	r.setPosition(position);
